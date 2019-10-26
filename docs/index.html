@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="index.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js">
+  <title>SYM</title>
+</head>
+<body dark-mode="false">
+  <header class="flex align-center">
+    <h1 class="center-text">SYM</h1>
+    <i id="dark-mode-icon" class="material-icons" onclick="changeTheme()">brightness_4</i>
+  </header>
+
+  <main>
+    <section>
+      <h2 id="current-date">Date: 8/ 31/ 2019</h2>
+    </section>
+    <section id="expense-chart">
+      <canvas id="mychart" width="280px" height="280px"></canvas>
+      <p id="total-expense"></p>
+    </section>
+    <section class="flex align-center">
+      <h2 class="margin-r-auto">My Expenses</h2>
+      <i class="material-icons" onclick="elementCreation()">add_circle</i>
+    </section>
+
+    <section class="main-budget-container"></section>
+
+    <button id="submit-button">Submit</button>
+  </main>
+
+  <script src="index.js"></script>
+  <script src="getCurrentDate.js"></script>
+  <script src="./node_modules/chart.js/dist/Chart.js"></script>
+</body>
+</html>

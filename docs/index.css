@@ -1,0 +1,115 @@
+/* Font Styles */
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+button {
+  border-radius: 16px;
+  border: 1px solid black;
+  background: none;
+  font-size: 16px;
+  padding: 4px 20px;
+  margin-top: 2rem;
+}
+
+button:hover {
+  background: #6200ee;
+}
+
+header {
+  color: white;
+  background-color: #6200ee;
+  padding: 4px 16px;
+}
+
+h1 {
+  margin: auto auto;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+body {
+  box-shadow: 0px 2px 6px 2px rgba(211, 211, 211, 0.7);
+  transition: 1s;
+}
+
+i {
+  transition: 1s;
+}
+
+input {
+  width: inherit;
+}
+
+main {
+  padding: 4px 16px;
+}
+
+.margin-r-auto {
+  margin-right: auto;
+}
+
+.doc-fragment {
+  align-items: center;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  box-shadow:  0px 2px 2px 1px rgba(211, 211, 211, 0.7);
+  margin-bottom: 4px;
+}
+
+.delete-icon {
+  margin-left: auto;
+}
+
+.budget-section {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 8px;
+}
+
+.budget-form {
+  display: flex;
+}
+
+#expense-chart {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 320px) and (max-width: 530px) {
+  * {
+    font-size: 16px;
+  }
+
+  *, .material-icons {
+    transition: 1s;
+  }
+
+  input {
+    width: 10rem;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .budget-form {
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 991px) {
+  body {
+    margin: auto 25%;
+  }
+}
