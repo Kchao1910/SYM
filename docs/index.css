@@ -88,6 +88,10 @@ main {
   flex-direction: column;
 }
 
+#chart-title {
+  text-align: center;
+}
+
 @media screen and (min-width: 320px) and (max-width: 530px) {
   * {
     font-size: 16px;

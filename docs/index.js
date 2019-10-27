@@ -1,3 +1,7 @@
+let darkTheme = {
+  darkMode: false
+};
+
 function changeTheme() {
   let body = document.getElementsByTagName("body");
   let theme = body[0].getAttribute("dark-mode");
@@ -11,9 +15,11 @@ function changeTheme() {
   switch (theme) {
     case "true":
       changeStyles(body, themeIcon, header, submitButton, "#121212", "#e2e2e2", theme, "brightness_5", "#1f1f1f", docFragment, "#272727", "0px 2px 2px 2px rgba(41, 35, 35, 0.7)");
+      darkTheme.darkMode = true;
       break;
     case "false":
       changeStyles(body, themeIcon, header, submitButton, "white", "black", theme, "brightness_4", "#6200ee", docFragment, "white", "0px 2px 2px 2px rgba(211, 211, 211, 0.7)");
+      darkTheme.darkMode = false;
       break;
   }
 }
@@ -26,11 +32,13 @@ function getDocumentFragments() {
 function changeStyles(body, themeIcon, header, submitButton, bodyBackgroundColor, bodyColor, colorTheme, textContent, headerBackgroundColor, nodeList, theme, boxShadow) {
   body[0].style.backgroundColor = bodyBackgroundColor;
   body[0].style.color = bodyColor;
+  body[0].style.boxShadow = boxShadow;
   body[0].setAttribute("dark-mode", colorTheme);
   themeIcon.textContent = textContent;
   header[0].style.backgroundColor = headerBackgroundColor;
-  submitButton.style.backgroundColor = headerBackgroundColor;
-  submitButton.style.color = theme;
+  submitButton.style.backgroundColor = bodyBackgroundColor;
+  submitButton.style.color = bodyColor;
+  submitButton.style.border = `${bodyColor} solid 1px`;
   documentFragmentStyles(nodeList, theme, boxShadow);
 }
 
@@ -93,11 +101,12 @@ function elementCreation() {
 
   let documentFragmentNodeList = getDocumentFragments();
 
-  if (documentFragmentNodeList[0].style.backgroundColor === "rgb(39, 39, 39)" && documentFragmentNodeList.length >= 0)
+  console.log(darkTheme.darkMode);
+  if (darkTheme.darkMode === true) {
     documentFragmentStyles(documentFragmentNodeList, "rgb(39, 39, 39)", "0px 2px 2px 2px rgba(41, 35, 35, 0.7)");
-
-  if (documentFragmentNodeList[0].style.backgroundColor === "white" && documentFragmentNodeList.length >= 0)
+  } else {
     documentFragmentStyles(documentFragmentNodeList, "white", "0px 2px 2px 2px rgba(211, 211, 211, 0.7)")
+  }
 }
 
 (function() {
@@ -177,19 +186,12 @@ function createBarChart(categoryInputValues, expenseInputValues) {
       data: {
         labels: categoryInputValues,
         datasets: [{
-            label: "Expense Distribution",
             data: expenseInputValues,
             backgroundColor: colors
         }]
       },
       options: {
         responsive: false,
-        title: {
-          fontFamily: "'Montserrat', sans-serif",
-          display: true,
-          text: "Expense Distribution",
-          fontColor: "black"
-        }
       }
   });
 }
@@ -221,3 +223,19 @@ function createNewCanvas(parent) {
   documentFragment.appendChild(canvas);
   parent.prepend(documentFragment);
 }
+
+setTimeout(function() {
+  let ctx = document.getElementById("mychart").getContext('2d');
+  let myChart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["No data"],
+        datasets: [{
+            data: ["100"]
+        }]
+      },
+      options: {
+        responsive: false,
+      }
+  });
+}, 1000);
