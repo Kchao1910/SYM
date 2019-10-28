@@ -14,9 +14,9 @@ function Theme(bodyBackgroundColor, bodyColor, boxShadow, brightness, formBackgr
   this.mode = mode;
 }
 
-let darkTheme = new Theme("rgba(0, 0, 0, 0.9)", "rgba(255, 255, 255, 0.9)", "0px 8px 16px rgba(0, 0, 0, 0.7)", "brightness_5", "rgb(39, 39, 39)", "rgb(39, 39, 39)", "true");
+let darkTheme = new Theme("rgba(0, 0, 0, 0.9)", "rgba(255, 255, 255, 0.9)", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_5", "rgb(39, 39, 39)", "rgb(39, 39, 39)", "true");
 
-let lightTheme = new Theme("white", "black", "0px 8px 16px rgba(0, 0, 0, 0.7)", "brightness_4", "white", "rgb(98, 0, 238)", "false");
+let lightTheme = new Theme("white", "black", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_4", "white", "rgb(98, 0, 238)", "false");
 
 // changeTheme handles changing themes between dark mode and light mode
 function changeTheme() {
@@ -119,12 +119,11 @@ function elementCreation() {
   let documentFragmentNodeList = getDocumentFragments();
 
   if (mainTheme.darkModeOn === true) {
-    documentFragmentStyles(documentFragmentNodeList, "rgb(39, 39, 39)", "0px 8px 16px rgba(0, 0, 0, 0.7)");
+    documentFragmentStyles(documentFragmentNodeList, "rgb(39, 39, 39)", "0px 4px 10px rgba(0, 0, 0, 0.25)");
   } else {
-    documentFragmentStyles(documentFragmentNodeList, "white", "0px 8px 16px rgba(0, 0, 0, 0.7)");
+    documentFragmentStyles(documentFragmentNodeList, "white", "0px 4px 10px rgba(0, 0, 0, 0.25)");
   }
 }
-
 
 // this is an IIFE that ensures that the user enters in the correct input
 (function() {
