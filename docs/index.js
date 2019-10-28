@@ -4,19 +4,20 @@ let mainTheme = {
 }
 
 // Theme is an object that holds the properties of a certain theme (dark mode and light mode)
-function Theme(bodyBackgroundColor, bodyColor, boxShadow, brightness, formBackgroundColor, headerBackgroundColor, mode) {
+function Theme(bodyBackgroundColor, bodyColor, boxShadow, brightness, buttonClassName, formBackgroundColor, headerBackgroundColor, mode) {
   this.bodyBackgroundColor = bodyBackgroundColor;
   this.bodyColor = bodyColor;
   this.boxShadow = boxShadow;
   this.brightness = brightness;
+  this.buttonClassName = buttonClassName;
   this.formBackgroundColor = formBackgroundColor;
   this.headerBackgroundColor = headerBackgroundColor;
   this.mode = mode;
 }
 
-let darkTheme = new Theme("rgba(0, 0, 0, 0.9)", "rgba(255, 255, 255, 0.9)", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_5", "rgb(39, 39, 39)", "rgb(39, 39, 39)", "true");
+let darkTheme = new Theme("rgba(0, 0, 0, 0.9)", "rgba(255, 255, 255, 0.9)", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_5", "dark-button", "rgb(39, 39, 39)", "rgb(39, 39, 39)", "true");
 
-let lightTheme = new Theme("white", "black", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_4", "white", "rgb(98, 0, 238)", "false");
+let lightTheme = new Theme("white", "black", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_4", "light-button", "white", "rgb(98, 0, 238)", "false");
 
 // changeTheme handles changing themes between dark mode and light mode
 function changeTheme() {
@@ -51,9 +52,7 @@ function changeStyles(body, themeIcon, header, submitButton, nodeList, newTheme)
   body[0].style.boxShadow = newTheme.boxShadow;
   themeIcon.textContent = newTheme.brightness;
   header[0].style.backgroundColor = newTheme.headerBackgroundColor;
-  submitButton.style.backgroundColor = newTheme.bodyBackgroundColor;
-  submitButton.style.color = newTheme.bodyColor;
-  submitButton.style.border = `${newTheme.bodyColor} solid 1px`;
+  submitButton.setAttribute("class", newTheme.buttonClassName);
   documentFragmentStyles(nodeList, newTheme.formBackgroundColor, newTheme.boxShadow);
 }
 
