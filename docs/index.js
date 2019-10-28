@@ -178,8 +178,8 @@ function displayResults(categoryInputValues, expenseInputValues) {
 function createBarChart(categoryInputValues, expenseInputValues) {
   let chart = document.getElementById("mychart");
   resetChart(chart);
-  let colors = ["#ff8a80", "#ff80ab", "#ea80ab", "#b388ff", "#8c93ff", "ff5252", "ff4081", "e040fb", "7e4dff", "536dfe", "ff1744", 
-  "f50057", "d500f9", "651fff", "3d5afe"];
+  let colors = ["#ff8a80", "#ff80ab", "#ea80ab", "#b388ff", "#8c93ff", "#82b1ff", "#80d8ff", "#84ffff", "#a7ffeb", "#b9f6ca", "#ccff90", 
+  "#f4ff81", "#ffff8d", "#ffe57f", "#ffd180", "#ff9e80"];
   let ctx = document.getElementById("mychart").getContext('2d');
   let myChart = new Chart(ctx, {
       type: "doughnut",
