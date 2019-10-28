@@ -10,7 +10,6 @@ a {
   background: none;
   font-size: 16px;
   padding: 8px 34px;
-  margin-top: 1rem;
 }
 
 a, .light-button, .dark-button {
@@ -71,6 +70,7 @@ input {
 }
 
 main {
+  margin-bottom: 2rem;
   padding: 1rem 16px;
 }
 
