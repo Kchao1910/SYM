@@ -70,8 +70,11 @@ input {
 }
 
 main {
-  margin-bottom: 2rem;
   padding: 1rem 16px;
+}
+
+.main-budget-container {
+  margin-bottom: 2rem;
 }
 
 .margin-r-auto {
