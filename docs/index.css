@@ -4,22 +4,16 @@
 }
 
 a {
-  padding: 4px 20px;
   text-decoration: none;
   color: black;
-}
-
-a {
-  border: none;
   border-radius: 16px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   background: none;
   font-size: 16px;
-  padding: 4px 20px;
+  padding: 8px 34px;
   margin-top: 1rem;
 }
 
-.light-button, .dark-button {
+a, .light-button, .dark-button {
   border: none;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 }
@@ -64,7 +58,6 @@ h1 {
 
 body {
   border-radius: 4px;
-  box-shadow: 0px 2px 6px 2px rgba(211, 211, 211, 0.7);
   margin: 0;
   transition: .5s;
 }
