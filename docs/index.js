@@ -1,53 +1,70 @@
-let darkTheme = {
-  darkMode: false
-};
+// mainTheme is an object to hold the default setting for changing themes
+let mainTheme = {
+  darkModeOn: false //default settings
+}
 
+// Theme is an object that holds the properties of a certain theme (dark mode and light mode)
+function Theme(bodyBackgroundColor, bodyColor, boxShadow, brightness, formBackgroundColor, headerBackgroundColor, mode) {
+  this.bodyBackgroundColor = bodyBackgroundColor;
+  this.bodyColor = bodyColor;
+  this.boxShadow = boxShadow;
+  this.brightness = brightness;
+  this.formBackgroundColor = formBackgroundColor;
+  this.headerBackgroundColor = headerBackgroundColor;
+  this.mode = mode;
+}
+
+let darkTheme = new Theme("rgba(0, 0, 0, 0.9)", "rgba(255, 255, 255, 0.9)", "0px 8px 16px rgba(0, 0, 0, 0.7)", "brightness_5", "rgb(39, 39, 39)", "rgb(39, 39, 39)", "true");
+
+let lightTheme = new Theme("white", "black", "0px 8px 16px rgba(0, 0, 0, 0.7)", "brightness_4", "white", "rgb(98, 0, 238)", "false");
+
+// changeTheme handles changing themes between dark mode and light mode
 function changeTheme() {
   let body = document.getElementsByTagName("body");
-  let theme = body[0].getAttribute("dark-mode");
+  let theme = mainTheme.darkModeOn;
   let themeIcon = document.querySelector("#dark-mode-icon");
   let header = document.getElementsByTagName("header");
   let docFragment = document.querySelectorAll(".doc-fragment");
   let submitButton = document.querySelector("#submit-button");
-  
-  theme = (theme === "false") ? "true" : "false";
 
-  switch (theme) {
-    case "true":
-      changeStyles(body, themeIcon, header, submitButton, "#121212", "#e2e2e2", theme, "brightness_5", "#1f1f1f", docFragment, "#272727", "0px 2px 2px 2px rgba(41, 35, 35, 0.7)");
-      darkTheme.darkMode = true;
-      break;
-    case "false":
-      changeStyles(body, themeIcon, header, submitButton, "white", "black", theme, "brightness_4", "#6200ee", docFragment, "white", "0px 2px 2px 2px rgba(211, 211, 211, 0.7)");
-      darkTheme.darkMode = false;
-      break;
+  if (theme === false) {
+    // change to dark theme
+    changeStyles(body, themeIcon, header, submitButton, docFragment, darkTheme);
+    mainTheme.darkModeOn = true;
+  } else {
+    // change to light theme
+    changeStyles(body, themeIcon, header, submitButton, docFragment, lightTheme);
+    mainTheme.darkModeOn = false;
   }
 }
 
+// getDocumentFragments retrieves all form elements
 function getDocumentFragments() {
   let documentFragmentNodeList = document.querySelectorAll(".doc-fragment");
   return documentFragmentNodeList;
 }
 
-function changeStyles(body, themeIcon, header, submitButton, bodyBackgroundColor, bodyColor, colorTheme, textContent, headerBackgroundColor, nodeList, theme, boxShadow) {
-  body[0].style.backgroundColor = bodyBackgroundColor;
-  body[0].style.color = bodyColor;
-  body[0].style.boxShadow = boxShadow;
-  body[0].setAttribute("dark-mode", colorTheme);
-  themeIcon.textContent = textContent;
-  header[0].style.backgroundColor = headerBackgroundColor;
-  submitButton.style.backgroundColor = bodyBackgroundColor;
-  submitButton.style.color = bodyColor;
-  submitButton.style.border = `${bodyColor} solid 1px`;
-  documentFragmentStyles(nodeList, theme, boxShadow);
+// changeStyles takes in elements and styles them depending on the selected theme
+function changeStyles(body, themeIcon, header, submitButton, nodeList, newTheme) {
+  body[0].style.backgroundColor = newTheme.bodyBackgroundColor;
+  body[0].style.color = newTheme.bodyColor;
+  body[0].style.boxShadow = newTheme.boxShadow;
+  themeIcon.textContent = newTheme.brightness;
+  header[0].style.backgroundColor = newTheme.headerBackgroundColor;
+  submitButton.style.backgroundColor = newTheme.bodyBackgroundColor;
+  submitButton.style.color = newTheme.bodyColor;
+  submitButton.style.border = `${newTheme.bodyColor} solid 1px`;
+  documentFragmentStyles(nodeList, newTheme.formBackgroundColor, newTheme.boxShadow);
 }
 
+// documentFragmentStyles changes the styles of form elements
 function documentFragmentStyles(nodeList, theme, boxShadow) {
   for (let element of nodeList) {
     element.style = `background-color: ${theme}; box-shadow: ${boxShadow}`; 
   }
 }
 
+// elementCreation appends a form(category name and expenses) element to the DOM
 function elementCreation() {
   const mainBudgetContainer = document.querySelector(".main-budget-container");
   const docFragment = document.createDocumentFragment();
@@ -101,14 +118,15 @@ function elementCreation() {
 
   let documentFragmentNodeList = getDocumentFragments();
 
-  console.log(darkTheme.darkMode);
-  if (darkTheme.darkMode === true) {
-    documentFragmentStyles(documentFragmentNodeList, "rgb(39, 39, 39)", "0px 2px 2px 2px rgba(41, 35, 35, 0.7)");
+  if (mainTheme.darkModeOn === true) {
+    documentFragmentStyles(documentFragmentNodeList, "rgb(39, 39, 39)", "0px 8px 16px rgba(0, 0, 0, 0.7)");
   } else {
-    documentFragmentStyles(documentFragmentNodeList, "white", "0px 2px 2px 2px rgba(211, 211, 211, 0.7)")
+    documentFragmentStyles(documentFragmentNodeList, "white", "0px 8px 16px rgba(0, 0, 0, 0.7)");
   }
 }
 
+
+// this is an IIFE that ensures that the user enters in the correct input
 (function() {
   let submitButton = document.querySelector("#submit-button");
   submitButton.addEventListener("click", function() {
@@ -116,7 +134,11 @@ function elementCreation() {
   });
 })();
 
+// checks if the user enters in the right information type
 function validateForm() {
+  if (getDocumentFragments().length === 0)
+    return;
+
   let categoryInputElements = document.querySelectorAll(".category-input");
   let expenseInputElements = document.querySelectorAll(".expense-input");
 
@@ -126,18 +148,19 @@ function validateForm() {
   expenseInputValues = stringToNumber(expenseInputValues);
 
   if (checkString(categoryInputValues).length !== 0) {
-    alert("Category names can only be characters.");
+    alert("Categories must be filled out with characters.");
     return;
   }
 
   if (checkNumber(expenseInputValues).length !== 0) {
-    alert("Expenses can only be numerical values.");
+    alert("Expenses must be completed with numerical values.");
     return;
   }
 
   displayResults(categoryInputValues, expenseInputValues);
 }
 
+// getInputValues retrieves input values
 function getInputValues(array) {
   let newArray = [];
 
@@ -149,11 +172,11 @@ function getInputValues(array) {
 }
 
 function checkString(array) {
-  return array.filter(value => (typeof(value) !== "string"));
+  return array.filter(value => (typeof(value) !== "string") || (value === ""));
 }
 
 function checkNumber(array) {
-  return array.filter(value => ((typeof(value) !== "number") || (isNaN(value) === true))); // strings converted to number are of type number
+  return array.filter(value => ((value === 0) || (typeof(value) !== "number") || (isNaN(value) === true))); // strings converted to number are of type number
 }
 
 function stringToNumber(array) {
@@ -170,12 +193,14 @@ function getSum(array) {
   return sum;
 }
 
+// displayResults outputs the total expenses
 function displayResults(categoryInputValues, expenseInputValues) {
-  createBarChart(categoryInputValues, expenseInputValues);
+  createDonutChart(categoryInputValues, expenseInputValues);
   displayTotalExpense(expenseInputValues);
 }
 
-function createBarChart(categoryInputValues, expenseInputValues) {
+// createDonutChart displays a doughnut chart
+function createDonutChart(categoryInputValues, expenseInputValues) {
   let chart = document.getElementById("mychart");
   resetChart(chart);
   let colors = ["#ff8a80", "#ff80ab", "#ea80ab", "#b388ff", "#8c93ff", "#82b1ff", "#80d8ff", "#84ffff", "#a7ffeb", "#b9f6ca", "#ccff90", 
@@ -224,6 +249,7 @@ function createNewCanvas(parent) {
   parent.prepend(documentFragment);
 }
 
+// this IIFE displays a default chart with no data when the user first uses the application
 setTimeout(function() {
   let ctx = document.getElementById("mychart").getContext('2d');
   let myChart = new Chart(ctx, {
