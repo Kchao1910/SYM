@@ -137,8 +137,8 @@ function validateForm() {
   if (getDocumentFragments().length === 0)
     return;
 
-  let categoryInputElements = document.querySelectorAll(".category-input");
-  let expenseInputElements = document.querySelectorAll(".expense-input");
+  let categoryInputElements = [...document.querySelectorAll(".category-input")];
+  let expenseInputElements = [...document.querySelectorAll(".expense-input")];
 
   let categoryInputValues = getInputValues(categoryInputElements);
   let expenseInputValues = getInputValues(expenseInputElements);
@@ -160,13 +160,7 @@ function validateForm() {
 
 // getInputValues retrieves input values
 function getInputValues(array) {
-  let newArray = [];
-
-  for (let element of array) {
-    newArray.push(element.value);
-  }
-
-  return newArray;
+  return array.map(element => element.value);
 }
 
 function checkString(array) {
