@@ -1,3 +1,5 @@
+let csvDownloadButton = document.querySelector("#save-alt");
+
 // mainTheme is an object to hold the default setting for changing themes
 let mainTheme = {
   darkModeOn: false //default settings
@@ -50,6 +52,7 @@ function changeStyles(body, themeIcon, header, submitButton, nodeList, newTheme)
   body[0].style.backgroundColor = newTheme.bodyBackgroundColor;
   body[0].style.color = newTheme.bodyColor;
   body[0].style.boxShadow = newTheme.boxShadow;
+  csvDownloadButton.setAttribute("class", `${newTheme.buttonClassName} material-icons`);
   themeIcon.textContent = newTheme.brightness;
   header[0].style.backgroundColor = newTheme.headerBackgroundColor;
   submitButton.setAttribute("class", newTheme.buttonClassName);
@@ -128,6 +131,7 @@ function elementCreation() {
 (function() {
   let submitButton = document.querySelector("#submit-button");
   submitButton.addEventListener("click", function() {
+    disableCsvDownload();
     validateForm();
   });
 })();
@@ -154,6 +158,8 @@ function validateForm() {
     alert("Expenses must be completed with numerical values.");
     return;
   }
+
+  enableCsvDownload(categoryInputValues, expenseInputValues);
 
   displayResults(categoryInputValues, expenseInputValues);
 }
@@ -257,3 +263,39 @@ setTimeout(function() {
       }
   });
 }, 1000);
+
+function enableCsvDownload(categoryInputValues, expenseInputValues) {
+  csvDownloadButton.removeAttribute("disabled");
+  csvDownloadButton.setAttribute("enabled", "enabled");
+  document.querySelector("#save-alt").addEventListener("click", function() {
+    createCsv(categoryInputValues, expenseInputValues);
+  });
+}
+
+function disableCsvDownload()
+{
+  csvDownloadButton.removeAttribute("enabled");
+  csvDownloadButton.setAttribute("disabled", "disabled");
+}
+
+function createCsv(categoryInputValues, expenseInputValues) {
+  let rows = [];
+  for (let element in categoryInputValues) {
+    rows[element] = [categoryInputValues[element], expenseInputValues[element]];
+  }
+
+  let csv = 'Category, Expense\n';
+  
+  rows.forEach(function(rowList) {
+    csv += rowList.join(',');
+    csv += "\n";
+  });
+
+  const link = document.createElement('a');
+  link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+  link.target = '_blank';
+  link.download = "symBudget.csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
