@@ -1,29 +1,43 @@
 let csvDownloadButton = document.querySelector("#save-alt");
+const body = document.body;
+const mainBudgetContainer = document.querySelector(".main-budget-container");
 
 // mainTheme is an object to hold the default setting for changing themes
 let mainTheme = {
   darkModeOn: false //default settings
 }
 
+let darkTheme = new Theme("brightness_5", "dark-button", "dark-theme-body", "dark-theme-form", "dark-theme-header", "true");
+let lightTheme = new Theme("brightness_4", "light-button", "light-theme-body", "light-theme-form", "light-theme-header", "false");
+
 // Theme is an object that holds the properties of a certain theme (dark mode and light mode)
-function Theme(bodyBackgroundColor, bodyColor, boxShadow, brightness, buttonClassName, formBackgroundColor, headerBackgroundColor, mode) {
-  this.bodyBackgroundColor = bodyBackgroundColor;
-  this.bodyColor = bodyColor;
-  this.boxShadow = boxShadow;
+function Theme(brightness, buttonClassName, bodyClassName, formClassName, headerClassName, mode) {
   this.brightness = brightness;
   this.buttonClassName = buttonClassName;
-  this.formBackgroundColor = formBackgroundColor;
-  this.headerBackgroundColor = headerBackgroundColor;
+  this.bodyClassName = bodyClassName;
+  this.formClassName = formClassName;
+  this.headerClassName = headerClassName;
   this.mode = mode;
 }
 
-let darkTheme = new Theme("rgba(0, 0, 0, 0.9)", "rgba(255, 255, 255, 0.9)", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_5", "dark-button", "rgb(39, 39, 39)", "rgb(39, 39, 39)", "true");
+// Event delegation
+document.addEventListener("click", event => {
+  if (event.target.matches("#dark-mode-icon")) {
+    changeTheme();
+  }
 
-let lightTheme = new Theme("white", "black", "0px 4px 10px rgba(0, 0, 0, 0.25)", "brightness_4", "light-button", "white", "rgb(98, 0, 238)", "false");
+  if (event.target.matches(".delete-icon")) {
+    deleteForm(event.target);
+  }
+
+  if (event.target.matches("#submit-button")) {
+    disableCsvDownload();
+    validateForm();
+  }
+});
 
 // changeTheme handles changing themes between dark mode and light mode
 function changeTheme() {
-  let body = document.getElementsByTagName("body");
   let theme = mainTheme.darkModeOn;
   let themeIcon = document.querySelector("#dark-mode-icon");
   let header = document.getElementsByTagName("header");
@@ -49,26 +63,24 @@ function getDocumentFragments() {
 
 // changeStyles takes in elements and styles them depending on the selected theme
 function changeStyles(body, themeIcon, header, submitButton, nodeList, newTheme) {
-  body[0].style.backgroundColor = newTheme.bodyBackgroundColor;
-  body[0].style.color = newTheme.bodyColor;
-  body[0].style.boxShadow = newTheme.boxShadow;
+  body.setAttribute("class", newTheme.bodyClassName);
   csvDownloadButton.setAttribute("class", `${newTheme.buttonClassName} material-icons`);
-  themeIcon.textContent = newTheme.brightness;
-  header[0].style.backgroundColor = newTheme.headerBackgroundColor;
   submitButton.setAttribute("class", newTheme.buttonClassName);
-  documentFragmentStyles(nodeList, newTheme.formBackgroundColor, newTheme.boxShadow);
+  header[0].setAttribute("class", newTheme.headerClassName);
+  themeIcon.textContent = newTheme.brightness;
+  
+  documentFragmentStyles(nodeList, newTheme);
 }
 
 // documentFragmentStyles changes the styles of form elements
-function documentFragmentStyles(nodeList, theme, boxShadow) {
+function documentFragmentStyles(nodeList, newTheme) {
   for (let element of nodeList) {
-    element.style = `background-color: ${theme}; box-shadow: ${boxShadow}`; 
+    element.setAttribute = newTheme.formClassName; 
   }
 }
 
 // elementCreation appends a form(category name and expenses) element to the DOM
 function elementCreation() {
-  const mainBudgetContainer = document.querySelector(".main-budget-container");
   const docFragment = document.createDocumentFragment();
   const section = document.createElement("section");
 
@@ -91,6 +103,9 @@ function elementCreation() {
 
   categoryInput.setAttribute("class", "category-input");
   expenseInput.setAttribute("class", "expense-input");
+  categoryInput.setAttribute("type", "text");
+  expenseInput.setAttribute("type", "number");
+  expenseInput.setAttribute("min", "0");
 
   categoryInput.placeholder = "Rent";
   expenseInput.placeholder = "1000.00";
@@ -98,11 +113,6 @@ function elementCreation() {
   categoryLabel.textContent = "Category Name";
   expenseLabel.textContent = "Expenses";
   deleteIcon.textContent = "delete";
-
-  deleteIcon.addEventListener("click", function(deleteIcon) {
-    let parent = deleteIcon.target.parentElement;
-    mainBudgetContainer.removeChild(parent);
-  });
 
   categoryContainer.appendChild(categoryLabel);
   categoryContainer.appendChild(categoryInput);
@@ -121,20 +131,16 @@ function elementCreation() {
   let documentFragmentNodeList = getDocumentFragments();
 
   if (mainTheme.darkModeOn === true) {
-    documentFragmentStyles(documentFragmentNodeList, "rgb(39, 39, 39)", "0px 4px 10px rgba(0, 0, 0, 0.25)");
+    documentFragmentStyles(documentFragmentNodeList, lightTheme);
   } else {
-    documentFragmentStyles(documentFragmentNodeList, "white", "0px 4px 10px rgba(0, 0, 0, 0.25)");
+    documentFragmentStyles(documentFragmentNodeList, darkTheme);
   }
 }
 
-// this is an IIFE that ensures that the user enters in the correct input
-(function() {
-  let submitButton = document.querySelector("#submit-button");
-  submitButton.addEventListener("click", function() {
-    disableCsvDownload();
-    validateForm();
-  });
-})();
+function deleteForm(target) {
+  let parent = target.parentElement;
+  mainBudgetContainer.removeChild(parent);
+}
 
 // checks if the user enters in the right information type
 function validateForm() {
@@ -170,7 +176,7 @@ function getInputValues(array) {
 }
 
 function checkString(array) {
-  return array.filter(value => (typeof(value) !== "string") || (value === ""));
+  return array.filter(value => typeof(value) !== "string" || value === "" || value.includes("<") || value.includes(">"));
 }
 
 function checkNumber(array) {
@@ -226,6 +232,7 @@ function displayTotalExpense(expenseInputValues) {
   expenseTotalElement.textContent = `Total Expenses: $${sum}`;
 }
 
+// this function ensures that only one graph is in the DOM
 function resetChart(chart) {
   let expenseChart = document.querySelector("#expense-chart");
 
@@ -247,27 +254,10 @@ function createNewCanvas(parent) {
   parent.prepend(documentFragment);
 }
 
-// this IIFE displays a default chart with no data when the user first uses the application
-setTimeout(function() {
-  let ctx = document.getElementById("mychart").getContext('2d');
-  let myChart = new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: ["No data"],
-        datasets: [{
-            data: ["100"]
-        }]
-      },
-      options: {
-        responsive: false,
-      }
-  });
-}, 1000);
-
 function enableCsvDownload(categoryInputValues, expenseInputValues) {
   csvDownloadButton.removeAttribute("disabled");
   csvDownloadButton.setAttribute("enabled", "enabled");
-  document.querySelector("#save-alt").addEventListener("click", function() {
+  csvDownloadButton.addEventListener("click", function() {
     createCsv(categoryInputValues, expenseInputValues);
   });
 }
@@ -299,3 +289,20 @@ function createCsv(categoryInputValues, expenseInputValues) {
   link.click();
   document.body.removeChild(link);
 }
+
+// this IIFE displays a default chart with no data when the user first uses the application
+setTimeout(function() {
+  let ctx = document.getElementById("mychart").getContext('2d');
+  let myChart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["No data"],
+        datasets: [{
+            data: ["100"]
+        }]
+      },
+      options: {
+        responsive: false,
+      }
+  });
+}, 1000);
