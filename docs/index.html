@@ -4,28 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="SYM is a web app that helps you visualize your expenses.">
   <link rel="stylesheet" href="index.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js">
   <title>SYM</title>
 </head>
 <body dark-mode="false">
-  <header id="header" class="flex align-center">
+  <header id="header">
     <h1 class="center-text">SYM</h1>
-    <i id="dark-mode-icon" class="material-icons" onclick="changeTheme()">brightness_4</i>
+    <i id="dark-mode-icon" class="material-icons">brightness_4</i>
   </header>
 
   <main>
     <section>
-      <h2 id="current-date">Date: 8/ 31/ 2019</h2>
+      <h2 id="current-date"></h2>
     </section>
     <h2 id="chart-title">Expense Distribution</h2>
     <section id="expense-chart">
       <canvas id="mychart" width="280px" height="280px"></canvas>
       <p id="total-expense"></p>
     </section>
-    <section class="flex align-center">
+    <section class="expense-header">
       <h2 class="margin-r-auto">My Expenses</h2>
       <i class="material-icons" onclick="elementCreation()">add_circle</i>
     </section>
@@ -33,14 +33,15 @@
     <section class="main-budget-container"></section>
 
     <section class="button-container">
-      <a id="submit-button" class="light-button" href="#header">Submit</a>
+      <a id="submit-button" class="light-button" href="#header" type="button">Submit</a>
       <i id="save-alt" class="material-icons light-button" disabled="disabled">save_alt</i>
     </section>
+
   </main>
 
   <script src="index.js"></script>
   <script src="getCurrentDate.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-  <!--<script src="./node_modules/chart.js/dist/Chart.js"></script>-->
+  <!-- <script src="./node_modules/chart.js/dist/Chart.js"></script> -->
 </body>
 </html>
