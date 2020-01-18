@@ -36,6 +36,21 @@ document.addEventListener("click", event => {
   }
 });
 
+document.addEventListener("touchstart", event => {
+  if (event.target.matches("#dark-mode-icon")) {
+    changeTheme();
+  }
+
+  if (event.target.matches(".delete-icon")) {
+    deleteForm(event.target);
+  }
+
+  if (event.target.matches("#submit-button")) {
+    disableCsvDownload();
+    validateForm();
+  }
+});
+
 // changeTheme handles changing themes between dark mode and light mode
 function changeTheme() {
   let theme = mainTheme.darkModeOn;
